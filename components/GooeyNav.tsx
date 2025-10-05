@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect, useState } from 'react';
 
 interface GooeyNavItem {
@@ -23,7 +25,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   particleDistances = [90, 10],
   particleR = 100,
   timeVariance = 300,
-  colors = [1, 2, 3, 1, 2, 3, 1, 4],
+  colors = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
   initialActiveIndex = 0
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,6 +33,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   const filterRef = useRef<HTMLSpanElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(initialActiveIndex);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   const noise = (n = 1) => n / 2 - Math.random() * n;
   const getXY = (distance: number, pointIndex: number, totalPoints: number): [number, number] => {
@@ -67,7 +70,8 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
         particle.style.setProperty('--end-y', `${p.end[1]}px`);
         particle.style.setProperty('--time', `${p.time}ms`);
         particle.style.setProperty('--scale', `${p.scale}`);
-        particle.style.setProperty('--color', `var(--color-${p.color}, white)`);
+        // Mengubah warna partikel menjadi gradasi hijau yang lebih halus
+        particle.style.setProperty('--color', `radial-gradient(circle at center, hsla(${140 + noise(20)}, 80%, 60%, ${p.color * 1.2}), hsla(${140 + noise(20)}, 80%, 60%, 0) 70%)`);
         particle.style.setProperty('--rotate', `${p.rotate}deg`);
         point.classList.add('point');
         particle.appendChild(point);
@@ -97,38 +101,67 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     Object.assign(textRef.current.style, styles);
     textRef.current.innerText = element.innerText;
   };
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
-    const liEl = e.currentTarget;
-    if (activeIndex === index) return;
-    setActiveIndex(index);
-    updateEffectPosition(liEl);
-    if (filterRef.current) {
-      const particles = filterRef.current.querySelectorAll('.particle');
-      particles.forEach(p => filterRef.current!.removeChild(p));
+
+  const triggerAnimation = (index: number, element: HTMLElement) => {
+    if (activeIndex === index || isAnimating) return;
+  
+    // Sembunyikan teks pada item yang diklik
+    const anchor = element.querySelector('a');
+    // Sembunyikan semua teks menu lainnya juga
+    navRef.current?.querySelectorAll('li a').forEach(a => ((a as HTMLElement).style.opacity = '0'));
+    if (anchor) {
+      anchor.style.opacity = '0';
     }
+
+    setIsAnimating(true);
+    updateEffectPosition(element);
+  
+    if (filterRef.current) {
+      // Clear old particles more safely
+      const particles = filterRef.current.querySelectorAll('.particle');
+      particles.forEach(p => p.remove());
+    }
+  
     if (textRef.current) {
+      textRef.current.style.opacity = '0'; // Sembunyikan teks efek
       textRef.current.classList.remove('active');
       void textRef.current.offsetWidth;
       textRef.current.classList.add('active');
     }
+  
     if (filterRef.current) {
       makeParticles(filterRef.current);
     }
+  
+    const maxAnimationTime = animationTime * 2 + timeVariance;
+    setTimeout(() => {
+      setActiveIndex(index);
+      if (textRef.current) {
+        textRef.current.style.opacity = '1'; // Tampilkan kembali teks efek
+      }
+      // Kembalikan visibilitas semua teks menu setelah animasi selesai
+      if (navRef.current) {
+        navRef.current.querySelectorAll('li a').forEach(a => ((a as HTMLElement).style.opacity = '1'));
+      }
+      setIsAnimating(false);
+    }, maxAnimationTime);
   };
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
+    const liEl = e.currentTarget.parentElement as HTMLLIElement;
+    triggerAnimation(index, liEl);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLAnchorElement>, index: number) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      const liEl = e.currentTarget.parentElement;
+      const liEl = e.currentTarget.parentElement as HTMLLIElement;
       if (liEl) {
-        handleClick(
-          {
-            currentTarget: liEl
-          } as React.MouseEvent<HTMLAnchorElement>,
-          index
-        );
+        triggerAnimation(index, liEl);
       }
     }
   };
+
   useEffect(() => {
     if (!navRef.current || !containerRef.current) return;
     const activeLi = navRef.current.querySelectorAll('li')[activeIndex] as HTMLElement;
@@ -162,29 +195,27 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             place-items: center;
             z-index: 1;
           }
-          .effect.text {
-            color: white;
-            transition: color 0.3s ease;
-          }
+          .effect.text { 
+            color: black; /* Warna teks default */
+            transition: color 0.15s ease; 
+          } 
           .effect.text.active {
-            color: black;
+            color: #10b981; /* Warna teks hijau saat aktif */
           }
           .effect.filter {
-            filter: blur(7px) contrast(100) blur(0);
-            mix-blend-mode: lighten;
+            /* Efek gooey dinonaktifkan untuk memperjelas partikel */
           }
           .effect.filter::before {
             content: "";
             position: absolute;
             inset: -75px;
             z-index: -2;
-            background: black;
           }
           .effect.filter::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: white;
+            /* background: white; Latar belakang pill dihilangkan */
             transform: scale(0);
             opacity: 0;
             z-index: -1;
@@ -205,19 +236,20 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             opacity: 0;
             width: 20px;
             height: 20px;
-            border-radius: 9999px;
+            border-radius: 50%; /* Mengubah partikel menjadi lingkaran */
             transform-origin: center;
           }
           .particle {
             --time: 5s;
             position: absolute;
-            top: calc(50% - 8px);
-            left: calc(50% - 8px);
+            top: calc(50% - 10px);
+            left: calc(50% - 10px);
             animation: particle calc(var(--time)) ease 1 -350ms;
           }
           .point {
             background: var(--color);
             opacity: 1;
+            box-shadow: none; /* Menghilangkan shadow agar lebih soft */
             animation: point calc(var(--time)) ease 1 -350ms;
           }
           @keyframes particle {
@@ -267,7 +299,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             }
           }
           li.active {
-            color: black;
+            color: #10b981; /* Warna teks hijau saat aktif */
             text-shadow: none;
           }
           li.active::after {
@@ -279,11 +311,19 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             position: absolute;
             inset: 0;
             border-radius: 8px;
-            background: white;
+            /* background: white; Latar belakang pill dihilangkan */
             opacity: 0;
             transform: scale(0);
             transition: all 0.3s ease;
             z-index: -1;
+          }
+          li a {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s 0.1s ease, transform 0.3s 0.1s ease;
+          }
+          li.active a {
+            transition-delay: 0.3s; /* Tunda kemunculan teks aktif agar partikel selesai */
           }
         `}
       </style>
@@ -291,24 +331,30 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
         <nav className="flex relative" style={{ transform: 'translate3d(0,0,0.01px)' }}>
           <ul
             ref={navRef}
-            className="flex gap-8 list-none p-0 px-4 m-0 relative z-[3]"
+            role="menubar"
+            className="flex gap-4 list-none p-0 px-4 m-0 relative z-[3]"
             style={{
-              color: 'white',
-              textShadow: '0 1px 1px hsl(205deg 30% 10% / 0.2)'
+              color: 'black', // Warna teks default
+              fontFamily: "'Inter Tight', sans-serif",
+              fontWeight: 100
             }}
           >
             {items.map((item, index) => (
               <li
                 key={index}
-                className={`rounded-full relative cursor-pointer transition-[background-color_color_box-shadow] duration-300 ease shadow-[0_0_0.5px_1.5px_transparent] text-white ${
+                role="none"
+                className={`rounded-full relative cursor-pointer transition-[color] duration-150 ease ${
                   activeIndex === index ? 'active' : ''
                 }`}
               >
                 <a
+                  role="menuitem"
+                  aria-current={activeIndex === index ? 'page' : undefined}
+                  tabIndex={0}
                   href={item.href}
                   onClick={e => handleClick(e, index)}
                   onKeyDown={e => handleKeyDown(e, index)}
-                  className="outline-none py-[0.6em] px-[1em] inline-block"
+                  className="outline-none py-[0.6em] px-[1em] inline-block text-sm"
                 >
                   {item.label}
                 </a>
@@ -316,8 +362,13 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             ))}
           </ul>
         </nav>
-        <span className="effect filter" ref={filterRef} />
-        <span className="effect text" ref={textRef} />
+        <span className="effect filter" ref={filterRef} aria-hidden="true" />
+        <span
+          className="effect text text-sm"
+          ref={textRef}
+          aria-hidden="true"
+          style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 100 }}
+        />
       </div>
     </>
   );
