@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,21 @@ const bebasNeue = Bebas_Neue({
 
 export function Navbar() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => !prev);
@@ -27,33 +42,40 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mt-4">
-      <div className="container flex h-14 items-center px-4 md:px-6">
-        <div className="flex flex-1 items-center justify-start">
-          {/* Logo di Kiri */}
-          <Link href="/" className={`${bebasNeue.className} mr-6 flex items-center space-x-2`}>
-            <span className="inline-block text-2xl">
-              ZM
-            </span>
+    <header
+      className={`sticky top-0 z-50 flex w-full justify-center transition-all duration-500 ease-in-out ${
+        isScrolled ? "top-2" : "top-0"
+      }`}
+    >
+      <div
+        className={`relative flex h-14 w-full items-center justify-between rounded-full border border-transparent bg-transparent transition-all duration-500 ease-in-out md:px-6 ${
+          isScrolled
+            ? "max-w-4xl border-white/20 bg-white/10 backdrop-blur-xl"
+            : "max-w-full border-transparent bg-transparent"
+        }`}
+      >
+        {/* Logo di Kiri */}
+        <div
+          className={`flex items-center transition-all duration-500 ease-in-out`}
+        >
+          <Link
+            href="/"
+            className={`${bebasNeue.className} mr-6 flex items-center space-x-2`}
+          >
+            <span className="inline-block text-2xl">ZM</span>
           </Link>
         </div>
 
         {/* Menu Navigasi di Tengah */}
-        <GooeyNav items={navItems} />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <GooeyNav items={navItems} />
+        </div>
 
         {/* Toggle Dark/Light Mode di Kanan */}
-        <div className="flex flex-1 items-center justify-end">
+        <div className="flex items-center justify-end">
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
-            <Sun
-              className={`h-[1.2rem] w-[1.2rem] transition-all ${
-                isDarkMode ? "rotate-90 scale-0" : "rotate-0 scale-100"
-              }`}
-            />
-            <Moon
-              className={`absolute h-[1.2rem] w-[1.2rem] transition-all ${
-                isDarkMode ? "rotate-0 scale-100" : "-rotate-90 scale-0"
-              }`}
-            />
+            <Sun className={`h-[1.2rem] w-[1.2rem] transition-all duration-500 ease-in-out ${isDarkMode ? "rotate-90 scale-0" : "rotate-0 scale-100"}`} />
+            <Moon className={`absolute h-[1.2rem] w-[1.2rem] transition-all duration-500 ease-in-out ${isDarkMode ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
             <span className="sr-only">Toggle theme</span>
           </Button>
         </div>

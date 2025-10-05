@@ -336,7 +336,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             style={{
               color: 'black', // Warna teks default
               fontFamily: "'Inter Tight', sans-serif",
-              fontWeight: 200
+              fontWeight: 100
             }}
           >
             {items.map((item, index) => (
@@ -367,7 +367,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
           className="effect text text-sm"
           ref={textRef}
           aria-hidden="true"
-          style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 200 }}
+          style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 100 }}
         />
       </div>
     </>
