@@ -19,6 +19,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["var(--font-poppins)", "sans-serif"],
+        'clash-display': ['Clash Display', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {

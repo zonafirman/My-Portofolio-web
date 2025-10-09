@@ -71,7 +71,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
         particle.style.setProperty('--time', `${p.time}ms`);
         particle.style.setProperty('--scale', `${p.scale}`);
         // Mengubah warna partikel menjadi gradasi hijau yang lebih halus
-        particle.style.setProperty('--color', `radial-gradient(circle at center, hsla(${140 + noise(20)}, 80%, 60%, ${p.color * 1.2}), hsla(${140 + noise(20)}, 80%, 60%, 0) 70%)`);
+        particle.style.setProperty('--color', `radial-gradient(circle at center, hsla(${260 + noise(40)}, 90%, 65%, ${p.color * 1.2}), hsla(${260 + noise(40)}, 90%, 65%, 0) 70%)`);
         particle.style.setProperty('--rotate', `${p.rotate}deg`);
         point.classList.add('point');
         particle.appendChild(point);
@@ -141,10 +141,15 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
       }
       // Kembalikan visibilitas semua teks menu setelah animasi selesai
       if (navRef.current) {
-        navRef.current.querySelectorAll('li a').forEach(a => ((a as HTMLElement).style.opacity = '1'));
+        navRef.current.querySelectorAll('li').forEach((li, i) => {
+          const a = li.querySelector('a') as HTMLElement;
+          if (a) {
+            a.style.opacity = i === index ? '0' : '1';
+          }
+        });
       }
       setIsAnimating(false);
-    }, maxAnimationTime);
+    }, maxAnimationTime / 2); // Mempercepat animasi perpindahan
   };
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
@@ -168,6 +173,13 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     if (activeLi) {
       updateEffectPosition(activeLi);
       textRef.current?.classList.add('active');
+      // Sembunyikan teks item aktif dan tampilkan yang lain
+      navRef.current.querySelectorAll('li').forEach((li, i) => {
+        const a = li.querySelector('a') as HTMLElement;
+        if (a) {
+          a.style.opacity = i === activeIndex ? '0' : '1';
+        }
+      });
     }
     const resizeObserver = new ResizeObserver(() => {
       const currentActiveLi = navRef.current?.querySelectorAll('li')[activeIndex] as HTMLElement;
@@ -200,7 +212,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             transition: color 0.15s ease; 
           } 
           .effect.text.active {
-            color: #10b981; /* Warna teks hijau saat aktif */
+            color: #6B46C1; /* Warna teks ungu saat aktif */
           }
           .effect.filter {
             /* Efek gooey dinonaktifkan untuk memperjelas partikel */
@@ -299,8 +311,22 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             }
           }
           li.active {
-            color: #10b981; /* Warna teks hijau saat aktif */
+            color: #6B46C1; /* Warna teks ungu saat aktif */
             text-shadow: none;
+            position: relative;
+          }
+          li.active::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0.75em;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: #6B46C1;
+            border-radius: 50%;
+            opacity: 1;
+            transition: opacity 0.3s ease;
           }
           li.active::after {
             opacity: 1;
@@ -320,10 +346,16 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
           li a {
             opacity: 1;
             transform: translateY(0);
-            transition: opacity 0.3s 0.1s ease, transform 0.3s 0.1s ease;
+            transition: opacity 0.3s 0.1s ease, transform 0.3s 0.1s ease, padding 0.3s ease;
           }
           li.active a {
-            transition-delay: 0.3s; /* Tunda kemunculan teks aktif agar partikel selesai */
+            /* Opacity diatur oleh JS, tapi kita pastikan transisinya cepat saat disembunyikan */
+            transition: opacity 0.1s ease, transform 0.3s 0.1s ease, padding 0.3s ease;
+            padding-left: 1.75em; /* Padding untuk dot di kiri */
+            padding-right: 1.75em; /* Menambahkan padding di kanan */
+          }
+          li:not(.active) a {
+             transition-delay: 0.15s; /* Mempercepat kemunculan teks non-aktif */
           }
         `}
       </style>

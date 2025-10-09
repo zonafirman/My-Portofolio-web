@@ -50,7 +50,7 @@ export function Navbar() {
       <div
         className={`relative flex h-14 w-full items-center justify-between rounded-full border border-transparent bg-transparent transition-all duration-500 ease-in-out md:px-6 ${
           isScrolled
-            ? "max-w-4xl border-white/20 bg-white/10 backdrop-blur-xl"
+            ? "max-w-4xl border-white bg-white/65 backdrop-blur-xl"
             : "max-w-full border-transparent bg-transparent"
         }`}
       >
