@@ -8,7 +8,7 @@ const HeroSection = () => {
       <div className="container mx-auto px-6 lg:px-8 py-24">
         
         {/* Baris Atas: Sapaan */}
-        <div className="flex items-center gap-2 text-lg text-gray-600 mb-4">
+        <div className="flex items-center gap-2 text-lg text-black mb-4">
           <Hand className="h-6 w-6 text-blue-500" />
           <span>Hey! It's me Zona,</span>
         </div>
@@ -37,7 +37,7 @@ const HeroSection = () => {
         <div className="mt-20">
           <div className="flex items-center justify-between gap-8">
             <hr className="w-full max-w-xl border-gray-400" />
-            <p className="max-w-xl text-sm text-gray-700 leading-relaxed text-left">
+            <p className="max-w-xl text-sm text-black leading-relaxed text-left">
               I work with brands globally to build pixel-perfect, engaging, and accessible digital experiences that drive results and achieve business goals.
             </p>
           </div>
