@@ -35,9 +35,9 @@ const HeroSection = () => {
 
         {/* Baris Bawah: Deskripsi */}
         <div className="mt-20">
-          <div className="flex items-start justify-between gap-8">
+          <div className="flex items-center justify-between gap-8">
             <hr className="w-full max-w-xl border-gray-400" />
-            <p className="max-w-xl text-sm text-gray-700 leading-relaxed text-right">
+            <p className="max-w-xl text-sm text-gray-700 leading-relaxed text-left">
               I work with brands globally to build pixel-perfect, engaging, and accessible digital experiences that drive results and achieve business goals.
             </p>
           </div>

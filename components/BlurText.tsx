@@ -3,6 +3,7 @@ import { motion, Transition, Easing } from 'motion/react';
 import { useEffect, useRef, useState, useMemo } from 'react';
 
 type BlurTextProps = {
+  as?: React.ElementType;
   text?: string;
   delay?: number;
   className?: string;
@@ -31,6 +32,7 @@ const buildKeyframes = (
 };
 
 const BlurText: React.FC<BlurTextProps> = ({
+  as: Component = 'p',
   text = '',
   delay = 200,
   className = '',
@@ -89,7 +91,7 @@ const BlurText: React.FC<BlurTextProps> = ({
   const times = Array.from({ length: stepCount }, (_, i) => (stepCount === 1 ? 0 : i / (stepCount - 1)));
 
   return (
-    <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
+    <Component ref={ref} className={`blur-text ${className} flex flex-wrap`}>
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
@@ -110,7 +112,6 @@ const BlurText: React.FC<BlurTextProps> = ({
             style={{
               display: 'inline-block',
               willChange: 'transform, filter, opacity',
-              color: 'inherit',
             }}
           >
             {segment === ' ' ? '\u00A0' : segment}
@@ -118,7 +119,7 @@ const BlurText: React.FC<BlurTextProps> = ({
           </motion.span>
         );
       })}
-    </p>
+    </Component>
   );
 };
 
