@@ -1,5 +1,6 @@
 import { Sparkles } from 'lucide-react';
 import ScrambledText from './ScrambledText';
+import { satoshi } from '../app/fonts'; // Menggunakan path yang benar ke file fonts.ts
 
 const AboutSection = () => {
   const aboutText =
@@ -14,7 +15,9 @@ const AboutSection = () => {
             About Me
           </h2>
         </div>
-        <ScrambledText className="!m-0 mt-4 max-w-2xl text-center text-black">
+        <ScrambledText
+          className={`!m-0 mt-4 max-w-2xl text-center text-black ${satoshi.className}`}
+        >
           {aboutText}
         </ScrambledText>
       </div>
