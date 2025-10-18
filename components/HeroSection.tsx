@@ -1,6 +1,6 @@
-import { Hand } from 'lucide-react';
 import BlurText from './BlurText';
 import SocialLinks from './SosialLink';
+import WavingHand from '@/components/WavingHand';
 
 const HeroSection = () => {
   return (
@@ -9,7 +9,7 @@ const HeroSection = () => {
         
         {/* Baris Atas: Sapaan */}
         <div className="flex items-center gap-2 text-lg text-black mb-4">
-          <Hand className="h-6 w-6 text-blue-500" />
+          <WavingHand />
           <span>Hey! It's me Zona,</span>
         </div>
 

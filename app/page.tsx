@@ -2,6 +2,10 @@ import HeroSection from "@/components/HeroSection";
 import LogoSection from "@/components/LogoSection";
 import AboutSection from "@/components/AboutSection";
 import ChromaGrid from "@/components/ChromaGrid";
+import Accordions from "@/components/Accordions";
+import Testimonials from "@/components/Testimonials";
+import Footer from "@/components/Footer";
+
 
 export default function Home() {
   return (
@@ -20,6 +24,9 @@ export default function Home() {
           <ChromaGrid />
         </div>
       </section>
+      <Accordions />
+      <Testimonials />
+      <Footer />
     </main>
   );
 }
