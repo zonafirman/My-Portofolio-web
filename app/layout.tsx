@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Navbar } from "@/components/navbar";
+import { MobileNav } from "@/components/MobileNav";
+import GradualBlur from "@/components/GradualBlur";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -21,9 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} font-sans antialiased bg-slate-50`}>
+     <body className={`${poppins.variable} font-sans antialiased bg-slate-50`}>
         <Navbar />
         <main>{children}</main>
+        <div className="hidden md:block">
+          <GradualBlur preset="page-footer" />
+        </div>
+        <MobileNav />
       </body>
     </html>
   );

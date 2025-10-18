@@ -9,7 +9,7 @@ export default function SocialLinks() {
   ];
 
   return (
-    <div className="group flex items-center justify-start space-x-8">
+    <div className="group flex flex-wrap items-center justify-start gap-x-6 gap-y-4 md:space-x-8">
       {links.map((link) => (
         <a
           key={link.name}

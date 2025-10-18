@@ -1,9 +1,10 @@
 // components/Footer.tsx
 import { Linkedin, Github, Instagram, Dribbble } from 'lucide-react';
+import ScrollFloat from './ScrollFloat';
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-50 relative pt-20 pb-10 px-4 sm:px-6 lg:px-8">
+    <footer className="relative pt-20 pb-10 px-4 sm:px-6 lg:px-8">
       {/* Container Utama untuk CTA */}
       <div className="max-w-6xl mx-auto bg-white rounded-3xl p-10 sm:p-20 text-center shadow-[0px_8px_40px_rgba(0,0,0,0.05)]">
         
@@ -17,9 +18,9 @@ const Footer = () => {
         </div>
         
         {/* Judul Utama */}
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-light text-gray-900 tracking-tighter leading-tight max-w-2xl mx-auto">
+         <ScrollFloat textClassName="text-4xl sm:text-5xl md:text-6xl font-light text-gray-900 tracking-tighter leading-tight max-w-2xl mx-auto">
           Let's create your next big idea.
-        </h2>
+        </ScrollFloat>
         
         {/* Tombol Kontak */}
         <a
@@ -31,6 +32,14 @@ const Footer = () => {
           <span className="relative z-10 block transition-transform duration-300 group-hover:-translate-y-full py-1">Contact Me</span>
           <span className="absolute inset-0 z-10 flex items-center justify-center transition-transform duration-300 translate-y-full group-hover:translate-y-0">Let's Talk</span>
         </a>
+
+        {/* Ikon Sosial Media (hanya untuk mobile) */}
+        <div className="sm:hidden flex items-center justify-center gap-5 mt-10">
+          <a href="#" aria-label="LinkedIn" className="text-gray-400 hover:text-gray-600 transition-colors"><Linkedin size={22} /></a>
+          <a href="#" aria-label="Dribbble" className="text-gray-400 hover:text-gray-600 transition-colors"><Dribbble size={22} /></a>
+          <a href="#" aria-label="GitHub" className="text-gray-400 hover:text-gray-600 transition-colors"><Github size={22} /></a>
+          <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-gray-600 transition-colors"><Instagram size={22} /></a>
+        </div>
       </div>
 
       {/* Baris Footer Bawah */}
@@ -38,7 +47,8 @@ const Footer = () => {
         <p className="text-gray-500 text-sm">
           &copy; 2025 Zona Firman. All rights reserved.
         </p>
-        <div className="flex items-center gap-5">
+        {/* Ikon Sosial Media (hanya untuk desktop) */}
+        <div className="hidden sm:flex items-center gap-5">
           <a href="#" aria-label="LinkedIn" className="text-gray-400 hover:text-gray-600 transition-colors"><Linkedin size={22} /></a>
           <a href="#" aria-label="Dribbble" className="text-gray-400 hover:text-gray-600 transition-colors"><Dribbble size={22} /></a>
           <a href="#" aria-label="GitHub" className="text-gray-400 hover:text-gray-600 transition-colors"><Github size={22} /></a>

@@ -191,7 +191,7 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
                 handleCardClick(c.url);
               }
             }}
-            className={`chroma-card group relative w-[550px] h-[450px] rounded-[20px] overflow-hidden transition-all duration-300 ease-out cursor-pointer grayscale hover:grayscale-0 hover:shadow-2xl hover:shadow-black/50 hover:z-30 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-offset-black focus:ring-white`}
+            className={`chroma-card group relative w-full md:h-[450px] md:aspect-auto rounded-[20px] overflow-hidden transition-all duration-300 ease-out cursor-pointer grayscale hover:grayscale-0 hover:shadow-2xl hover:shadow-black/50 hover:z-30 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-offset-black focus:ring-white`}
             style={
               {
                 '--card-border': c.borderColor || 'transparent',

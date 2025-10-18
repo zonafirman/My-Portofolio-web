@@ -13,7 +13,7 @@ export default function Home() {
       <HeroSection />
       <LogoSection />
       <AboutSection />
-      <section id="projects" className="py-20 md:py-24 bg-gray-50">
+      <section id="projects" className="py-20 md:py-24">
         <div className="container mx-auto px-6 lg:px-8">
           <h2 className="text-left text-4xl md:text-5xl font-light text-black mb-4">
             Selected Projects

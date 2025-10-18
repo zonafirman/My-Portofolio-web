@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Sparkles, ArrowUpRight, ArrowLeft, ArrowRight } from 'lucide-react';
+import ScrollFloat from './ScrollFloat'
 
 const testimonialsData = [
   {
@@ -61,7 +62,7 @@ const Testimonials = () => {
   const currentTestimonial = testimonialsData[activeIndex];
 
   return (
-    <section className="bg-slate-50 font-sans py-16 sm:py-24">
+    <section className="font-sans py-16 sm:py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
           
@@ -71,9 +72,12 @@ const Testimonials = () => {
               <Sparkles className="text-blue-500 h-5 w-5" />
               <p className="font-semibold tracking-wider bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">TESTIMONIALS</p>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mt-4 leading-tight tracking-tighter text-black">
+             <ScrollFloat
+              containerClassName="mb-8"
+              textClassName="text-4xl md:text-6xl font-bold mt-4 leading-tight tracking-tighter text-black"
+            >
               What others say about me
-            </h2>
+            </ScrollFloat>
             <p className="mt-6 text-lg text-gray-600">
               I've worked with some amazing people over the years, here is what they have to say about me.
             </p>

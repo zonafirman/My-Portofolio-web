@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { Code2, Palette, Megaphone, ChevronDown } from 'lucide-react'
 import Image from 'next/image'
+import ScrollFloat from './ScrollFloat'
 
 interface Item {
   title: string
@@ -45,7 +46,7 @@ export default function ExpertiseAccordion() {
   }
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 py-20">
+    <section className="py-20">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="relative w-full h-80 md:h-full rounded-2xl overflow-hidden shadow-lg">
@@ -66,15 +67,18 @@ export default function ExpertiseAccordion() {
             <p className="text-purple-600 dark:text-purple-400 font-medium uppercase tracking-widest mb-2">
               Speciality
             </p>
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
+            <ScrollFloat
+              containerClassName="mb-8"
+              textClassName="text-4xl font-bold text-gray-900 dark:text-white"
+            >
               Areas of Expertise
-            </h2>
+            </ScrollFloat>
 
             <div className="space-y-3">
               {items.map((item, index) => (
                 <div
                   key={index}
-                  className={`border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800 transition-all duration-300 overflow-hidden ${
+                  className={`border border-gray-200 dark:border-gray-700 rounded-2xl bg-white transition-all duration-300 overflow-hidden ${
                     active === index
                       ? 'shadow-lg dark:shadow-purple-900/20'
                       : 'shadow-sm'
@@ -89,12 +93,12 @@ export default function ExpertiseAccordion() {
                       <span className="text-purple-600 dark:text-purple-400">
                         {item.icon}
                       </span>
-                      <span className="font-semibold text-gray-800 dark:text-gray-100 text-lg">
+                      <span className="font-semibold text-gray-800 text-lg">
                         {item.title}
                       </span>
                     </div>
                     <ChevronDown
-                      className={`w-5 h-5 text-gray-500 dark:text-gray-400 transform transition-transform duration-300 ease-out ${
+                      className={`w-5 h-5 text-gray-500 transform transition-transform duration-300 ease-out ${
                         active === index ? 'rotate-180' : 'rotate-0'
                       }`}
                     />

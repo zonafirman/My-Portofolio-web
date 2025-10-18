@@ -43,7 +43,7 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 flex w-full justify-center transition-all duration-500 ease-in-out ${
+      className={`sticky top-0 z-50 hidden w-full justify-center transition-all duration-500 ease-in-out md:flex ${
         isScrolled ? "top-2" : "top-0"
       }`}
     >
@@ -67,7 +67,7 @@ export function Navbar() {
         </div>
 
         {/* Menu Navigasi di Tengah */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:block">
           <GooeyNav items={navItems} />
         </div>
 
